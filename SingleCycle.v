@@ -2,11 +2,12 @@ module SingleCycle(
     input clk,rst,
     input [31:0] Instr,
     input [31:0] ReadData,
-    output [31:0] ALUResult, WriteData
+    output MemWrite,
+    output [31:0] ALUResult, WriteData,
+    output [31:0] PC
 );
     wire PCSrc, ResultSrc, ALUSrc, RegWrite, ALUControl, ImmSrc,
          Zero;
-    wire [31:0] PC;
 
     Datapath Data(
         .PCSrc(PCSrc),

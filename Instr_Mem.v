@@ -1,4 +1,4 @@
-module Instr_Mem #(parameter WIDTH = 32)
+module Instr_MEM #(parameter WIDTH = 32)
 (
     input [WIDTH-1:0] Address,
     output [WIDTH-1:0] Instruction
