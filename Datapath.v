@@ -16,7 +16,7 @@ module Datapath(
     rff PC_Next (
         .clk(clk),
         .rst(rst),
-        .in(PC_Next),
+        .in(PCNext),
         .out(PC)
     );
     adder PC_Plus4 (
