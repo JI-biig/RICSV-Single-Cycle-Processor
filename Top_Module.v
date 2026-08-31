@@ -6,7 +6,7 @@ module Top_Module(
     wire [31:0] ReadData, PC, Instr;
     
     SingleCycle singleC(
-        .clk(clk), .rst(clk),
+        .clk(clk), .rst(rst),
         .Instr(Instr),
         .ReadData(ReadData),
         .MemWrite(MemWrite),

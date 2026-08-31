@@ -10,7 +10,7 @@ module Datapath(
     output [31:0] WriteData,
     input [31:0] ReadData
 );
-    wire [31:0] PCNext, PCPlus4, ImmExt,PCTarget, Result, SrcA;
+    wire [31:0] PCNext, PCPlus4, ImmExt,PCTarget, Result, SrcA, SrcB;
 
     // PC Next 
     rff PC_Next (
@@ -33,11 +33,11 @@ module Datapath(
         .in0(PCPlus4),
         .in1(PCTarget),
         .sel(PCSrc),
-        .sum(PCNext)
+        .out(PCNext)
     );
 
     // Register file
-    Regfile regf(
+    RegFile regf(
         .clk(clk),
         .A1(Instr[19:15]),
         .A2(Instr[24:20]),

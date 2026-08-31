@@ -14,7 +14,8 @@ module ALU #(parameter WIDTH = 32)(
             3'b001: Result = in0 - in1;
             3'b010: Result = in0 & in1;
             3'b011: Result = in0 | in1;
-            3'b101: Result = in0 < in1;
+            // slt instruction in RISCV Architecture is a comparision between signed numbers
+            3'b101: Result = ($signed(in0) < $signed(in1))? 32'b1: 32'b0; 
             default: Result = 32'b0;
         endcase
     end
