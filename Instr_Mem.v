@@ -7,7 +7,7 @@ module Instr_MEM #(parameter WIDTH = 32)
     reg [31:0] Mem [31:0];
 
     initial begin
-        $readmemh("", Mem);
+        $readmemh("riscvtest.mem", Mem);
     end
 
 

@@ -1,7 +1,7 @@
 module Datapath(
-    input PCSrc, ResultSrc, ALUSrc, RegWrite,
+    input PCSrc, ALUSrc, RegWrite,
     input [2:0] ALUControl,
-    input [1:0] ImmSrc,
+    input [1:0] ImmSrc, ResultSrc,
     input [31:0] Instr,
     input clk,rst,
     output [31:0] PC,
@@ -67,9 +67,10 @@ module Datapath(
         .sel(ALUSrc),
         .out(SrcB)
     );
-    Mux2_1 datamux(
+    Mux3_1 datamux(
         .in0(ALUResult),
         .in1(ReadData),
+        .in2(PCPlus4),
         .sel(ResultSrc),
         .out(Result)
     );

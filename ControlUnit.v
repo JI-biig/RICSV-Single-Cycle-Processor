@@ -1,12 +1,13 @@
 module ControlUnit(
     input [31:0] Instr,
     input Zero,
-    output PCSrc, ResultSrc, MemWrite, ALUSrc, RegWrite,
+    output PCSrc, MemWrite, ALUSrc, RegWrite,
     output [2:0] ALUControl,
-    output [1:0] ImmSrc
+    output [1:0] ImmSrc, ResultSrc
 );
     wire Branch;
     wire [1:0] ALUOp;
+    wire Jump;
 
     MainDecoder Decoder_Main (
         .op(Instr[6:0]),
@@ -16,7 +17,8 @@ module ControlUnit(
         .RegWrite(RegWrite),
         .Branch(Branch),
         .ImmSrc(ImmSrc),
-        .ALUOp(ALUOp)
+        .ALUOp(ALUOp),
+        .Jump(Jump)
     );
 
     ALUDecoder ALU (
@@ -27,6 +29,6 @@ module ControlUnit(
         .ALUControl(ALUControl)
     );
 
-    assign PCSrc = Branch & Zero;
+    assign PCSrc = (Branch & Zero) | Jump;
 
 endmodule

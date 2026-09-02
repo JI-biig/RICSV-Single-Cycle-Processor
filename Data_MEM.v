@@ -6,11 +6,6 @@ module Data_MEM(
 );
     reg [31:0] DataMEM [63:0];
 
-    initial 
-    begin
-        $readmemh("", DataMEM);
-    end
-
     always @(posedge clk)
     begin
         if(WE)
