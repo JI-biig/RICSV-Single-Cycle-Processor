@@ -6,9 +6,9 @@ module SingleCycle(
     output [31:0] ALUResult, WriteData,
     output [31:0] PC
 );
-    wire PCSrc, ResultSrc, ALUSrc, RegWrite, Zero; 
+    wire PCSrc, ALUSrc, RegWrite, Zero; 
     wire [2:0] ALUControl;
-    wire [1:0] ImmSrc;
+    wire [1:0] ImmSrc, ResultSrc;
 
     Datapath Data(
         .PCSrc(PCSrc),

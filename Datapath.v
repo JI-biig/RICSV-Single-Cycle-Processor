@@ -21,7 +21,7 @@ module Datapath(
     );
     adder PC_Plus4 (
         .in0(PC),
-        .in1(3'b100),
+        .in1(32'd4),
         .sum(PCPlus4)
     );  
     adder PC_Target(
