@@ -1,11 +1,12 @@
 module ALU #(parameter WIDTH = 32)(
     input [WIDTH-1:0] in0, in1,
     input [2:0] op,
-    output Zero,
+    output Zero, bge_flag,
     output reg [WIDTH-1:0] Result
 );
 
     assign Zero = (Result == 32'b0);
+    assign bge_flag = Result[0];
 
     always @(*)
     begin

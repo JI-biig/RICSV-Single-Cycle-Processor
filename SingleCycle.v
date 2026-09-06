@@ -6,7 +6,7 @@ module SingleCycle(
     output [31:0] ALUResult, WriteData,
     output [31:0] PC
 );
-    wire PCSrc, ALUSrc, RegWrite, Zero; 
+    wire PCSrc, ALUSrc, RegWrite, Zero, bge_flag; 
     wire [2:0] ALUControl;
     wire [1:0] ImmSrc, ResultSrc;
 
@@ -21,6 +21,7 @@ module SingleCycle(
         .clk(clk), .rst(rst),
         .PC(PC),
         .Zero(Zero),
+        .bge_flag(bge_flag),
         .ALUResult(ALUResult),
         .WriteData(WriteData),
         .ReadData(ReadData)
@@ -29,6 +30,7 @@ module SingleCycle(
     ControlUnit Control(
         .Instr(Instr),
         .Zero(Zero),
+        .bge_flag(bge_flag),
         .PCSrc(PCSrc),
         .ResultSrc(ResultSrc),
         .MemWrite(MemWrite),

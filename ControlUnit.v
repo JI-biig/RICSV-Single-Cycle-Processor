@@ -1,6 +1,6 @@
 module ControlUnit(
     input [31:0] Instr,
-    input Zero,
+    input Zero, bge_flag,
     output PCSrc, MemWrite, ALUSrc, RegWrite,
     output [2:0] ALUControl,
     output [1:0] ImmSrc, ResultSrc
@@ -8,6 +8,7 @@ module ControlUnit(
     wire Branch;
     wire [1:0] ALUOp;
     wire Jump;
+    wire ltflag, branchflag, BranchTaken;
 
     MainDecoder Decoder_Main (
         .op(Instr[6:0]),
@@ -29,6 +30,10 @@ module ControlUnit(
         .ALUControl(ALUControl)
     );
 
-    assign PCSrc = (Branch & Zero) | Jump;
+    // assign PCSrc = (Branch & Zero) | Jump;
+    assign ltflag = bge_flag;
+    assign branchflag = Instr[14]? ltflag: Zero;
+    assign BranchTaken = Branch & (branchflag ^ Instr[12]);
+    assign PCSrc = BranchTaken | Jump;
 
 endmodule

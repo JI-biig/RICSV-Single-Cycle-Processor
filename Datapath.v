@@ -5,7 +5,7 @@ module Datapath(
     input [31:0] Instr,
     input clk,rst,
     output [31:0] PC,
-    output Zero,
+    output Zero, bge_flag,
     output [31:0] ALUResult,
     output [31:0] WriteData,
     input [31:0] ReadData
@@ -59,6 +59,7 @@ module Datapath(
         .in1(SrcB),
         .op(ALUControl),
         .Zero(Zero),
+        .bge_flag(bge_flag),
         .Result(ALUResult)
     );
     Mux2_1 addMux(
