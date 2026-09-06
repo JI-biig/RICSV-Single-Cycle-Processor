@@ -1,7 +1,7 @@
 module Datapath(
-    input PCSrc, ALUSrc, RegWrite,
+    input ALUSrc, RegWrite,
     input [2:0] ALUControl,
-    input [1:0] ImmSrc, ResultSrc,
+    input [1:0] ImmSrc, ResultSrc, PCSrc,
     input [31:0] Instr,
     input clk,rst,
     output [31:0] PC,
@@ -29,9 +29,10 @@ module Datapath(
         .in1(ImmExt),
         .sum(PCTarget)
     );
-    Mux2_1 pcmux(
+    Mux3_1 pcmux(
         .in0(PCPlus4),
         .in1(PCTarget),
+        .in2({ALUResult[31:1], 1'b0}),  // (rs1 + imm) & ~1 => Clear LSB to 0
         .sel(PCSrc),
         .out(PCNext)
     );

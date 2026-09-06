@@ -4,7 +4,7 @@ module Instr_MEM #(parameter WIDTH = 32)
     output [WIDTH-1:0] Instruction
 );
 
-    reg [31:0] Mem [31:0];
+    reg [31:0] Mem [63:0];
 
     initial begin
         $readmemh("riscvtest.mem", Mem);
