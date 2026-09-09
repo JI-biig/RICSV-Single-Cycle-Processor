@@ -1,9 +1,10 @@
 module ControlUnit(
     input [31:0] Instr,
     input Zero, bge_flag,
-    output MemWrite, ALUSrc, RegWrite,
+    output MemWrite, ALUSrcB, ALUSrcA, RegWrite,
     output [2:0] ALUControl,
-    output [1:0] ImmSrc, ResultSrc, PCSrc
+    output [1:0] ResultSrc, PCSrc,
+    output [2:0] ImmSrc
 );
     wire Branch;
     wire [1:0] ALUOp;
@@ -14,7 +15,8 @@ module ControlUnit(
         .op(Instr[6:0]),
         .ResultSrc(ResultSrc),
         .MemWrite(MemWrite),
-        .ALUSrc(ALUSrc),
+        .ALUSrcB(ALUSrcB),
+        .ALUSrcA(ALUSrcA),
         .RegWrite(RegWrite),
         .Branch(Branch),
         .ImmSrc(ImmSrc),

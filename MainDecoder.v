@@ -1,21 +1,23 @@
-module MainDecoder(
+ MainDecoder(
     input [6:0] op,
-    output reg MemWrite, ALUSrc, RegWrite, Branch,Jump, Jalr,
-    output reg [1:0] ImmSrc, ALUOp,ResultSrc
+    output reg MemWrite, ALUSrcB, ALUSrcA, RegWrite, Branch,Jump, Jalr,
+    output reg [1:0] ALUOp,ResultSrc,
+    output reg [2:0] ImmSrc
 );
 
-    always @(*)
-    begin
-        case(op)
-            7'b0000011: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 12'b1001_0010_0000;
-            7'b0100011: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 12'b0011_1xx0_0000;
-            7'b0110011: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 12'b1xx0_0000_1000;
-            7'b1100011: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 12'b0100_0xx1_0100;
-            7'b0010011: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 12'b1001_0000_1000;
-            7'b1101111: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 12'b111x_0100_xx10;
-            7'b1100111: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 12'b1001_x100_0001;
-            default: {RegWrite, ImmSrc, ALUSrc, MemWrite, ResultSrc, Branch, ALUOp, Jump} = 11'b0000_0000_000;
-        endcase
-    end
-
+always @(*)
+begin
+    case(op)
+        7'b0000011: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b1000_1000_1000_00;
+        7'b0100011: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b0001_101x_x000_00;
+        7'b0110011: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b10xx_0000_0010_00;
+        7'b1100011: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b0010_000x_x101_00;
+        7'b0010011: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b1000_1000_0010_00;
+        7'b1101111: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b1011_x001_00xx_10;
+        7'b1100111: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b1000_10x1_0000_01;
+        7'b0010111: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump, Jalr} = 14'b1100_1100_0000_00;
+        default: {RegWrite, ImmSrc, ALUSrcB, ALUSrcA, MemWrite, ResultSrc, Branch, ALUOp, Jump} = 14'b0000_0000_0000_00;
+    endcase
+end
+        
 endmodule
