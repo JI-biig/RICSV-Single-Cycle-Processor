@@ -64,12 +64,12 @@ module Datapath(
         .Result(ALUResult)
     );
 
-    Mux2_1 PCRD1Mux (
+    Mux2_1 PC_RD1Mux (
         .in0(RD1_out),
         .in1(PC),
         .sel(ALUSrcA),
         .out(SrcA)
-    )
+    );
 
     Mux2_1 addMux(
         .in0(WriteData),

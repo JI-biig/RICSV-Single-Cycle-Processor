@@ -1,4 +1,4 @@
- MainDecoder(
+module MainDecoder(
     input [6:0] op,
     output reg MemWrite, ALUSrcB, ALUSrcA, RegWrite, Branch,Jump, Jalr,
     output reg [1:0] ALUOp,ResultSrc,
