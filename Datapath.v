@@ -1,7 +1,7 @@
 module Datapath(
-    input ALUSrc, RegWrite,
-    input [2:0] ALUControl,
-    input [1:0] ImmSrc, ResultSrc, PCSrc,
+    input ALUSrcB, ALUSrcA, RegWrite,
+    input [2:0] ALUControl, ImmSrc,
+    input [1:0] ResultSrc, PCSrc,
     input [31:0] Instr,
     input clk,rst,
     output [31:0] PC,
@@ -10,7 +10,7 @@ module Datapath(
     output [31:0] WriteData,
     input [31:0] ReadData
 );
-    wire [31:0] PCNext, PCPlus4, ImmExt,PCTarget, Result, SrcA, SrcB;
+    wire [31:0] PCNext, PCPlus4, ImmExt,PCTarget, Result, SrcA, SrcB, RD1_out;
 
     // PC Next 
     rff PC_Next (
@@ -45,7 +45,7 @@ module Datapath(
         .A3(Instr[11:7]),
         .WE3(RegWrite),
         .WD3(Result),
-        .RD1(SrcA),
+        .RD1(RD1_out),
         .RD2(WriteData)
     );
     Extender Ext(
@@ -63,10 +63,18 @@ module Datapath(
         .bge_flag(bge_flag),
         .Result(ALUResult)
     );
+
+    Mux2_1 PC_RD1Mux (
+        .in0(RD1_out),
+        .in1(PC),
+        .sel(ALUSrcA),
+        .out(SrcA)
+    );
+
     Mux2_1 addMux(
         .in0(WriteData),
         .in1(ImmExt),
-        .sel(ALUSrc),
+        .sel(ALUSrcB),
         .out(SrcB)
     );
     Mux3_1 datamux(

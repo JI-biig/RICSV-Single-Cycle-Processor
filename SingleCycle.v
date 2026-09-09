@@ -6,14 +6,15 @@ module SingleCycle(
     output [31:0] ALUResult, WriteData,
     output [31:0] PC
 );
-    wire ALUSrc, RegWrite, Zero, bge_flag; 
-    wire [2:0] ALUControl;
-    wire [1:0] ImmSrc, ResultSrc, PCSrc;
+    wire ALUSrcB, ALUSrcA, RegWrite, Zero, bge_flag; 
+    wire [2:0] ALUControl, ImmSrc;
+    wire [1:0] ResultSrc, PCSrc;
 
     Datapath Data(
         .PCSrc(PCSrc),
         .ResultSrc(ResultSrc),
-        .ALUSrc(ALUSrc),
+        .ALUSrcB(ALUSrcB),
+        .ALUSrcA(ALUSrcA),
         .RegWrite(RegWrite),
         .ALUControl(ALUControl),
         .ImmSrc(ImmSrc),
@@ -34,7 +35,8 @@ module SingleCycle(
         .PCSrc(PCSrc),
         .ResultSrc(ResultSrc),
         .MemWrite(MemWrite),
-        .ALUSrc(ALUSrc),
+        .ALUSrcB(ALUSrcB),
+        .ALUSrcA(ALUSrcA),
         .RegWrite(RegWrite),
         .ALUControl(ALUControl),
         .ImmSrc(ImmSrc)
