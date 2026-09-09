@@ -7,7 +7,7 @@ module Instr_MEM #(parameter WIDTH = 32)
     reg [31:0] Mem [63:0];
 
     initial begin
-        $readmemh("riscvtest.mem", Mem);
+        $readmemh("fibonacci.mem", Mem);
     end
 
 
