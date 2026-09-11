@@ -11,7 +11,7 @@ module Instr_MEM #(parameter WIDTH = 32)
     end
 
 
-    assign Instruction = Mem[Address[31:2]]; // [31:2] not => [31:0] Because of the Byte-Addressable Nature of RISC-V Architecture
+    assign Instruction = Mem[Address[7:2]]; // [31:2] not => [31:0] Because of the Byte-Addressable Nature of RISC-V Architecture
                                             //  That Allow Us Accessing {Mem[0]->Mem[1]-> ..} rather than {Mem[0] -> Mem[4] -> ..}
     
 endmodule

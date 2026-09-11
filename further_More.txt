@@ -1,3 +1,0 @@
-MainDecoder.v only handles load (0000011), store (0100011), R-type (0110011), and branch (1100011). 
-There's no support for I-type ALU ops (addi/andi/ori/slti, opcode 0010011), jal, jalr, lui, or auipc. 
-Fine if this is an intentionally reduced instruction subset for a course project, but worth being explicit about if you want a fuller RV32I core.
