@@ -1,11 +1,27 @@
 `timescale 1ns/1ps
 
-module Top_Module_tb();
-    reg clk,rst;
-    wire [31:0] WriteData, Addr;
-    wire MemWrite;
+module Top_Module_tb;
 
-    Top_Module DUT(
+    reg clk;
+    reg rst;
+
+    wire [31:0] WriteData, Addr;
+    wire        MemWrite;
+
+    // Expected 10th Fibonacci number (a after 10 loop =55)
+    localparam EXPECTED_RESULT = 32'd55;
+    localparam RESULT_ADDR     = 32'd32;          // matches (int*)32 in fibonacci.c
+    localparam RESULT_WORD_IDX = RESULT_ADDR >> 2; 
+
+    integer cycle_count;
+    integer i;
+    reg [31:0] pc_prev;
+    reg        halted;
+
+    // ---------------------------------------------------------------
+    // DUT
+    // ---------------------------------------------------------------
+    Top_Module dut (
         .clk(clk),
         .rst(rst),
         .WriteData(WriteData),
@@ -13,38 +29,77 @@ module Top_Module_tb();
         .MemWrite(MemWrite)
     );
 
-    // Clock generation
+    // ---------------------------------------------------------------
+    // Clock: 10ns period
+    // ---------------------------------------------------------------
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // Reset sequence
+    // ---------------------------------------------------------------
+    // Waveform dump
+    // ---------------------------------------------------------------
+    initial begin
+        $dumpfile("simulation.vcd");
+        $dumpvars(0, Top_Module_tb);
+    end
+
+    // ---------------------------------------------------------------
+    // Reset & run
+    // ---------------------------------------------------------------
     initial begin
         rst = 1;
-        #20
+        cycle_count = 0;
+        halted = 0;
+        pc_prev = 32'hFFFF_FFFF;
+
+        @(posedge clk);
+        @(posedge clk);
         rst = 0;
+
+        // Run until we detect the halt loop (jal x0,0 => PC stops changing)
+        while (!halted && cycle_count < 500) begin
+            @(posedge clk);
+            cycle_count = cycle_count + 1;
+
+            // dut.singleC.PC is the internal PC wire inside SingleCycle
+            if (dut.singleC.PC == pc_prev && cycle_count > 5) begin
+                halted = 1;
+            end
+            pc_prev = dut.singleC.PC;
+        end
+
+        $display("--------------------------------------------------");
+        if (halted)
+            $display("Halt loop detected after %0d cycles at PC=0x%08h",
+                      cycle_count, dut.singleC.PC);
+        else
+            $display("WARNING: halt loop NOT detected within %0d cycles",
+                      cycle_count);
+
+        // Give the final store a moment to settle (should already be done)
+        @(posedge clk);
+
+        check_result();
+
+        $display("--------------------------------------------------");
+        $finish;
     end
 
-initial begin
-    $dumpfile("simulation_dump.vcd");
-    $dumpvars(0, Top_Module_tb);
-end
-
-    // Checking logic
-    always @(negedge clk)
-    begin
-        if(MemWrite) begin
-            // Changed & to && for logical comparison
-            if(Addr === 100 && WriteData === 25) 
-            begin
-                $display("Simulation succeeded");
-                $finish; // Use $finish to completely exit
-            end 
-            else if (Addr !== 96) 
-            begin
-                $display("Simulation failed: Wrote to unexpected address %d", Addr);
-                $finish;
+    // ---------------------------------------------------------------
+    // Result check: read directly from Data_MEM
+    // ---------------------------------------------------------------
+    task check_result;
+        reg [31:0] got;
+        begin
+            got = dut.data.DataMEM[RESULT_WORD_IDX];
+            $display("Result @ addr %0d (word idx %0d) = %0d (0x%08h)",
+                      RESULT_ADDR, RESULT_WORD_IDX, got, got);
+            if (got === EXPECTED_RESULT) begin
+                $display("PASS: fibonacci(10) = %0d as expected", EXPECTED_RESULT);
+            end else begin
+                $display("FAIL: expected %0d, got %0d", EXPECTED_RESULT, got);
             end
         end
-    end
+    endtask
 
 endmodule
